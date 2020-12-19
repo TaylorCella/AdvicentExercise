@@ -88,39 +88,81 @@ export class CollegeComponent implements OnInit {
 
   includeRoomCost(isChecked:boolean ){
     if(isChecked){
-      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('inTuition').value;
-      console.log(this.cost);
+      // this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('inTuition').value;
+      this.includeRoom = true;
+      this.totalCostCalc();
+      // console.log(this.cost);
     }
+    // if(isChecked && this.includeOut){
+    //   this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+    //   this.includeRoom = true;
+    //   console.log(this.cost);
+    // }
     if(!isChecked) {
-      this.cost = this.collegeForm.get('inTuition').value;
+      this.includeRoom = false;
+      this.totalCostCalc();
     }
   }
 
   includeOutCost(isChecked:boolean ){
+    
     if(isChecked){
-      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
-      console.log(this.cost);
+      // this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+      this.includeOut = true;
+      this.includeIn = false;
+      this.totalCostCalc();
     }
-    if(!isChecked) {
-      this.cost = this.collegeForm.get('inTuition').value;
+    if(!isChecked){
+      // this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+      this.includeOut = false;  
+      this.includeIn = true; 
+      this.totalCostCalc();
     }
+  }
+
+  includeInCost(isChecked:boolean ){
+    
+    if(isChecked){
+      this.includeIn = true;
+      this.totalCostCalc();
+    }
+    if(!isChecked){
+      this.includeIn = false;
+      this.totalCostCalc();
+    }
+  }
+
+  checkIfZero(value){
+    if(value ==0){
+      return false;
+    }
+    return value;
   }
 
 
   totalCostCalc(){
-    if(this.includeIn == true && this.includeRoom == true){
+    if(this.includeIn && this.includeRoom){
       this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('inTuition').value;
       console.log(this.cost);
     }
-    else if(this.includeOut == true && this.includeRoom == true){
-      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+    else if(this.includeOut && this.includeRoom){
+      if(this.collegeForm.get('outTuition').value == 0){
+        this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('inTuition').value;
+      }
+      else {
+        this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+      }
     }
-    else if(this.includeOut == true && this.includeRoom == false){
-      this.cost = this.collegeForm.get('outTuition').value;
+    else if(this.includeOut && !this.includeRoom){
+      if(this.collegeForm.get('outTuition').value == 0){
+        this.cost = this.collegeForm.get('inTuition').value;
+      }
+      else {
+        this.cost = this.collegeForm.get('outTuition').value;
+      }
     }
     else{
       this.cost = this.collegeForm.get('inTuition').value;
     }
-    console.log(this.cost);
   }
 }

@@ -22,34 +22,111 @@
         </mat-card>
       </div>
     </div>
-    <div *ngIf="collegeForm.value.collegeSelection != ''">
-        <div class="row">
-            <div class="col-6">
-                <p>In State Tuition: {{collegeForm.value.inTuition | currency }}</p>
-                <mat-checkbox class="example-margin"
-                  (change)="includeIn == true">
-                    Include in Total Cost Calculation
-                </mat-checkbox>
+    <div *ngIf="collegeForm.value.collegeSelection != ''" class="row">
+        <mat-grid-list cols="6" rowHeight="100px">
+            <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1"
+                style="background:lightblue">
+                <div>
+                    <h1>{{collegeForm.value.collegeSelection }}</h1>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="2"
+                style="background:lightblue">
+                <div style="padding:15px">
+                    <mat-card class="example-card">
+                        <mat-card-header>
+                            <mat-card-subtitle>In State Tution Cost:</mat-card-subtitle>
+                            <mat-card-title>{{collegeForm.value.inTuition | currency }}</mat-card-title>
+                        </mat-card-header>
+                        <!-- <mat-card-content>
+                          <p>
+                            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                            bred for hunting.
+                          </p>
+                        </mat-card-content> -->
+                        <mat-card-actions>
+                            <mat-checkbox class="example-margin"
+                            (change)="includeInCost($event.checked)">
+                                Select In State Tuition
+                            </mat-checkbox>
+                        </mat-card-actions>
+                    </mat-card>
+                    <!-- <p>In State Tuition:</p>
+                    <h2>{{collegeForm.value.inTuition | currency }}</h2>
+                    <mat-checkbox class="example-margin"
+                    (change)="includeInCost($event.checked)">
+                        Select In State Tuition
+                    </mat-checkbox> -->
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="2"
+                style="background:lightblue">
+                <p>Out of State Tuition: {{checkIfZero(collegeForm.value.outTuition) ? (collegeForm.value.outTuition | currency) : (collegeForm.value.outTuition | handleZero)}}</p>
+                    <mat-checkbox class="example-margin"
+                    (change)="includeOutCost($event.checked)">
+                        Select Out of State Tuition
+                    </mat-checkbox>
+            </mat-grid-tile>
+            <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="2"
+                style="background:lightblue">
+                    <p>Room & Board Costs: {{collegeForm.value.roomBoard | currency}}</p>
+                    <mat-checkbox class="example-margin"
+                    (change)="includeRoomCost($event.checked)">
+                        Include in Total Cost Calculation
+                    </mat-checkbox>
+            </mat-grid-tile>
+            <mat-grid-tile
+            [colspan]="6"
+            [rowspan]="3"
+            style="background:lightblue">
+            <p>Total Cost: {{cost | currency }}</p>
+        </mat-grid-tile>
+          </mat-grid-list>
+        <!-- <div class="col-md-6">
+            <p>College: {{collegeForm.value.collegeName }}</p>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-12">
+                    <p>In State Tuition: {{collegeForm.value.inTuition | currency }}</p>
+                    <mat-checkbox class="example-margin"
+                      (change)="includeInCost($event.checked)">
+                        Select In State Tuition
+                    </mat-checkbox>
+                </div>
             </div>
-            <div class="col-6">
-                <p>Out of State Tuition: {{collegeForm.value.outTuition | currency}}</p>
-                <mat-checkbox class="example-margin"
-                  (change)="includeOutCost($event.checked)">
-                    Include in Total Cost Calculation
-                </mat-checkbox>
+            <div class="row">
+                <div class="col-12">
+                    <p>Out of State Tuition: {{checkIfZero(collegeForm.value.outTuition) ? (collegeForm.value.outTuition | currency) : (collegeForm.value.outTuition | handleZero)}}</p>
+                    <mat-checkbox class="example-margin"
+                    (change)="includeOutCost($event.checked)">
+                        Select Out of State Tuition
+                    </mat-checkbox>
+                </div>
             </div>
-            <div class="col-6">
-                <p>Room & Board Costs: {{collegeForm.value.roomBoard | currency}}</p>
-                <mat-checkbox class="example-margin"
-                  (change)="includeRoomCost($event.checked)">
-                    Include in Total Cost Calculation
-                </mat-checkbox>
+            <div class="row">
+                <div class="col-12">
+                    <p>Room & Board Costs: {{collegeForm.value.roomBoard | currency}}</p>
+                    <mat-checkbox class="example-margin"
+                    (change)="includeRoomCost($event.checked)">
+                        Include in Total Cost Calculation
+                    </mat-checkbox>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <p>Total Cost: {{cost | currency }}</p>
             </div>
-        </div>
+        </div> -->
     </div>
   </div>

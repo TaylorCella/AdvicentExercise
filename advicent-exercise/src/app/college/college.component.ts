@@ -7,10 +7,10 @@ import {map, startWith, debounceTime, distinctUntilChanged, tap} from 'rxjs/oper
 export class college {
   collegeName: string;
   inStateTuition: number;
-  outStateTuition: number;
+  outStateTuition: any;
   roomBoard: number;
 
-  constructor(collegeName: string, inStateTuition: number, outStateTuition: number, roomBoard: number){
+  constructor(collegeName: string, inStateTuition: number, outStateTuition: any, roomBoard: number){
     this.collegeName = collegeName;
     this.inStateTuition = inStateTuition;
     this.outStateTuition = outStateTuition;
@@ -24,7 +24,6 @@ export class college {
 })
 export class CollegeComponent implements OnInit {
   colleges: college[] = [];
-  @ViewChild('input', { static: false }) input: ElementRef;
   filteredOptions: Observable<college[]>;
   collegeForm: FormGroup = this.formBuilder.group({
     collegeSelection: '',
@@ -32,6 +31,10 @@ export class CollegeComponent implements OnInit {
     outTuition: '',
     roomBoard: ''
   });
+  cost: 0;
+  includeIn = true;
+  includeOut = false;
+  includeRoom = false;
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder){
     this.http.get('assets/college_costs.csv', {responseType: 'text'})
@@ -59,17 +62,65 @@ export class CollegeComponent implements OnInit {
 
   private _filterGroup(value: string): college[] {
     if (value) {
-      var test = this.colleges.filter(option => option.collegeName.toLowerCase().includes(value));
-      console.log(test.values);
-      console.log(test[1]);
-      return test;
+      return this.colleges.filter(option => option.collegeName.toLowerCase().includes(value));
     }
     return this.colleges;
   }
 
-  getCostValues(value){
-    let test = this._filterGroup(value);
-    this.collegeForm.get('inTuition').setValue(test[1]);
+  getValues(collegeName){
+    var selected = this.colleges.filter(option => option.collegeName.includes(collegeName));
+    this.collegeForm.get('inTuition').setValue(selected[0]['inStateTuition']);
+    this.collegeForm.get('roomBoard').setValue(selected[0]['roomBoard']);
+    if(isNaN(selected[0]['outStateTuition'])){
+      this.collegeForm.get('outTuition').setValue(0);
+    }
+    else {
+      this.collegeForm.get('outTuition').setValue(selected[0]['outStateTuition']);
+    }
+    if(isNaN(selected[0]['roomBoard'])){
+      this.collegeForm.get('roomBoard').setValue(0);
+    }
+    else {
+      this.collegeForm.get('roomBoard').setValue(selected[0]['roomBoard']);
+    }
+    this.totalCostCalc();
   }
 
+  includeRoomCost(isChecked:boolean ){
+    if(isChecked){
+      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('inTuition').value;
+      console.log(this.cost);
+    }
+    if(!isChecked) {
+      this.cost = this.collegeForm.get('inTuition').value;
+    }
+  }
+
+  includeOutCost(isChecked:boolean ){
+    if(isChecked){
+      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+      console.log(this.cost);
+    }
+    if(!isChecked) {
+      this.cost = this.collegeForm.get('inTuition').value;
+    }
+  }
+
+
+  totalCostCalc(){
+    if(this.includeIn == true && this.includeRoom == true){
+      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('inTuition').value;
+      console.log(this.cost);
+    }
+    else if(this.includeOut == true && this.includeRoom == true){
+      this.cost = this.collegeForm.get('roomBoard').value + this.collegeForm.get('outTuition').value;
+    }
+    else if(this.includeOut == true && this.includeRoom == false){
+      this.cost = this.collegeForm.get('outTuition').value;
+    }
+    else{
+      this.cost = this.collegeForm.get('inTuition').value;
+    }
+    console.log(this.cost);
+  }
 }

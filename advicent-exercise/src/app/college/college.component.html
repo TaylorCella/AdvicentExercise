@@ -12,7 +12,7 @@
                      formControlName="collegeSelection"
                      [matAutocomplete]="auto"
                      #input>
-              <mat-autocomplete #auto="matAutocomplete">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getValues($event.option.value)">
                 <mat-option *ngFor="let college of filteredOptions | async" [value]="college.collegeName">
                   {{college.collegeName}}
                 </mat-option>
@@ -23,6 +23,33 @@
       </div>
     </div>
     <div *ngIf="collegeForm.value.collegeSelection != ''">
-        <p>{{getCostValues(collegeForm.value.collegeSelection)}}</p>
+        <div class="row">
+            <div class="col-6">
+                <p>In State Tuition: {{collegeForm.value.inTuition | currency }}</p>
+                <mat-checkbox class="example-margin"
+                  (change)="includeIn == true">
+                    Include in Total Cost Calculation
+                </mat-checkbox>
+            </div>
+            <div class="col-6">
+                <p>Out of State Tuition: {{collegeForm.value.outTuition | currency}}</p>
+                <mat-checkbox class="example-margin"
+                  (change)="includeOutCost($event.checked)">
+                    Include in Total Cost Calculation
+                </mat-checkbox>
+            </div>
+            <div class="col-6">
+                <p>Room & Board Costs: {{collegeForm.value.roomBoard | currency}}</p>
+                <mat-checkbox class="example-margin"
+                  (change)="includeRoomCost($event.checked)">
+                    Include in Total Cost Calculation
+                </mat-checkbox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p>Total Cost: {{cost | currency }}</p>
+            </div>
+        </div>
     </div>
   </div>

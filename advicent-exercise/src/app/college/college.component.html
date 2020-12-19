@@ -3,10 +3,26 @@
       <div class="col-12">
         <mat-card>
           <h2>College</h2>
-          <ul>
-            <li *ngFor="let college of colleges">{{college.collegeName}}</li>
-          </ul>
+          <form class="example-form" [formGroup]="collegeForm">
+            <mat-form-field class="example-full-width">
+              <input type="text"
+                     placeholder="Enter College Name"
+                     aria-label="Colleges"
+                     matInput
+                     formControlName="collegeSelection"
+                     [matAutocomplete]="auto"
+                     #input>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let college of filteredOptions | async" [value]="college.collegeName">
+                  {{college.collegeName}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
         </mat-card>
       </div>
+    </div>
+    <div *ngIf="collegeForm.value.collegeSelection != ''">
+        <p>{{getCostValues(collegeForm.value.collegeSelection)}}</p>
     </div>
   </div>

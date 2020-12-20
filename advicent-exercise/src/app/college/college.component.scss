@@ -1,9 +1,26 @@
-.example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-  }
-  
-  .example-full-width {
-    width: 100%;
-  }
+@import '~bootstrap/scss/bootstrap-reboot';
+@import '~bootstrap/scss/bootstrap-grid';
+
+    .full-width {
+        width: 100%;
+    }
+
+    mat-card {
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+
+    mat-checkbox {
+        margin: 0 0 12px;
+    }
+
+    :host ::ng-deep .mat-card-header-text {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .row {
+        margin: 20px 0;
+        text-align: center;
+    }

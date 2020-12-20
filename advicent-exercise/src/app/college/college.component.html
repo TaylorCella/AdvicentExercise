@@ -2,9 +2,13 @@
     <div class="row">
       <div class="col-12">
         <mat-card>
-          <h2>College</h2>
-          <form class="example-form" [formGroup]="collegeForm">
-            <mat-form-field class="example-full-width">
+          <h1>College Cost Calculator Tool</h1>
+          <hr>
+          <p style="text-align: left;">Instructions: Select a college above by typing in the name or scrolling through the dropdown. Information
+            about the cost of the institution will be shown below, with in state tuition being the default selection when determining cost.
+            To select out of state tuition or to see the total cost with room and board included, use the checkboxes.</p>
+          <form [formGroup]="collegeForm">
+            <mat-form-field class="full-width">
               <input type="text"
                      placeholder="Enter College Name"
                      aria-label="Colleges"
@@ -22,111 +26,81 @@
         </mat-card>
       </div>
     </div>
-    <div *ngIf="collegeForm.value.collegeSelection != ''" class="row">
-        <mat-grid-list cols="6" rowHeight="100px">
-            <mat-grid-tile
-                [colspan]="6"
-                [rowspan]="1"
-                style="background:lightblue">
-                <div>
-                    <h1>{{collegeForm.value.collegeSelection }}</h1>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile
-                [colspan]="2"
-                [rowspan]="2"
-                style="background:lightblue">
-                <div style="padding:15px">
-                    <mat-card class="example-card">
+    <div *ngIf="collegeForm.value.collegeSelection != ''">
+        <div class="row">
+            <div class="col-12">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>
+                            <mat-icon aria-hidden="false" aria-label="Graduation cap icon">school</mat-icon><br>
+                            {{collegeForm.value.collegeSelection }}
+                        </mat-card-title>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-card >
                         <mat-card-header>
-                            <mat-card-subtitle>In State Tution Cost:</mat-card-subtitle>
+                            <mat-card-subtitle>
+                                <mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon><br>
+                                In State Tution Cost:
+                            </mat-card-subtitle>
                             <mat-card-title>{{collegeForm.value.inTuition | currency }}</mat-card-title>
                         </mat-card-header>
-                        <!-- <mat-card-content>
-                          <p>
-                            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                            bred for hunting.
-                          </p>
-                        </mat-card-content> -->
+                        <mat-card-actions>
+                            <p>Selected by default</p>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+                <div class="col-md-4">
+                    <mat-card >
+                        <mat-card-header>
+                            <mat-card-subtitle>
+                                <mat-icon aria-hidden="false" aria-label="Airplane icon">flight</mat-icon><br>
+                                Out of State Tution Cost:
+                            </mat-card-subtitle>
+                            <mat-card-title>{{checkIfZero(collegeForm.value.outTuition) ? (collegeForm.value.outTuition | currency) : (collegeForm.value.outTuition | handleZero)}}</mat-card-title>
+                        </mat-card-header>
                         <mat-card-actions>
                             <mat-checkbox class="example-margin"
-                            (change)="includeInCost($event.checked)">
-                                Select In State Tuition
+                            (change)="includeOutCost($event.checked)">
+                                Select Out of State Tuition
                             </mat-checkbox>
                         </mat-card-actions>
                     </mat-card>
-                    <!-- <p>In State Tuition:</p>
-                    <h2>{{collegeForm.value.inTuition | currency }}</h2>
-                    <mat-checkbox class="example-margin"
-                    (change)="includeInCost($event.checked)">
-                        Select In State Tuition
-                    </mat-checkbox> -->
                 </div>
-            </mat-grid-tile>
-            <mat-grid-tile
-                [colspan]="2"
-                [rowspan]="2"
-                style="background:lightblue">
-                <p>Out of State Tuition: {{checkIfZero(collegeForm.value.outTuition) ? (collegeForm.value.outTuition | currency) : (collegeForm.value.outTuition | handleZero)}}</p>
-                    <mat-checkbox class="example-margin"
-                    (change)="includeOutCost($event.checked)">
-                        Select Out of State Tuition
-                    </mat-checkbox>
-            </mat-grid-tile>
-            <mat-grid-tile
-                [colspan]="2"
-                [rowspan]="2"
-                style="background:lightblue">
-                    <p>Room & Board Costs: {{collegeForm.value.roomBoard | currency}}</p>
-                    <mat-checkbox class="example-margin"
-                    (change)="includeRoomCost($event.checked)">
-                        Include in Total Cost Calculation
-                    </mat-checkbox>
-            </mat-grid-tile>
-            <mat-grid-tile
-            [colspan]="6"
-            [rowspan]="3"
-            style="background:lightblue">
-            <p>Total Cost: {{cost | currency }}</p>
-        </mat-grid-tile>
-          </mat-grid-list>
-        <!-- <div class="col-md-6">
-            <p>College: {{collegeForm.value.collegeName }}</p>
-        </div>
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-12">
-                    <p>In State Tuition: {{collegeForm.value.inTuition | currency }}</p>
-                    <mat-checkbox class="example-margin"
-                      (change)="includeInCost($event.checked)">
-                        Select In State Tuition
-                    </mat-checkbox>
+                <div class="col-md-4">
+                    <mat-card >
+                        <mat-card-header>
+                            <mat-card-subtitle>
+                                <mat-icon>airline_seat_individual_suite</mat-icon><br>
+                                Room & Board:
+                            </mat-card-subtitle>
+                            <mat-card-title>{{collegeForm.value.roomBoard | currency}}</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-actions>
+                            <mat-checkbox class="example-margin"
+                            (change)="includeRoomCost($event.checked)">
+                                Include Room & Board
+                            </mat-checkbox>
+                        </mat-card-actions>
+                    </mat-card>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <p>Out of State Tuition: {{checkIfZero(collegeForm.value.outTuition) ? (collegeForm.value.outTuition | currency) : (collegeForm.value.outTuition | handleZero)}}</p>
-                    <mat-checkbox class="example-margin"
-                    (change)="includeOutCost($event.checked)">
-                        Select Out of State Tuition
-                    </mat-checkbox>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <p>Room & Board Costs: {{collegeForm.value.roomBoard | currency}}</p>
-                    <mat-checkbox class="example-margin"
-                    (change)="includeRoomCost($event.checked)">
-                        Include in Total Cost Calculation
-                    </mat-checkbox>
+                    <mat-card >
+                        <mat-card-header>
+                            <mat-card-subtitle>
+                                <mat-icon aria-hidden="false" aria-label="Dollar sign icon">attach_money</mat-icon><br>
+                                Total Cost:
+                            </mat-card-subtitle>
+                            <mat-card-title>{{cost | currency }}</mat-card-title>
+                        </mat-card-header>
+                    </mat-card>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <p>Total Cost: {{cost | currency }}</p>
-            </div>
-        </div> -->
-    </div>
   </div>

@@ -8,6 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatGridListModule
+    MatGridListModule,
+    MatIconModule
   ],
   exports: [
     CommonModule,
@@ -34,7 +36,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatGridListModule
+    MatGridListModule,
+    MatIconModule
   ]
 })
 export class SharedModule { }
